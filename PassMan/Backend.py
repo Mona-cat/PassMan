@@ -227,6 +227,10 @@ async def delete_password_app(id: int):
 import uvicorn
 import signal
 import threading
+import GUI
+from PySide6.QtWidgets import QApplication
+import sys
+import threading
 
 @app.post("/shutdown")
 def shutdown():
@@ -238,13 +242,23 @@ def shutdown():
 
         return{"message": "Server shutdown"}
 
-if __name__ == "__main__":
 
+def start_server(): 
         uvicorn.run(
-                     app,
-                     host="127.0.0.1",
-                     port=8000,
-                     log_config=None
-                        )
+                        app,
+                        host="127.0.0.1",
+                        port=8000,
+                        log_config=None
+                                )
+        
+if __name__ == "__main__":
+        server_thread = threading.Thread( target=start_server, daemon=True)
+        server_thread.start()
+
+        appstart = QApplication(sys.argv)
+        window = GUI.LoginWindow()
+        window.show()
+        appstart.exec()
 
 
+        
